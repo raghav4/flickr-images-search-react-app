@@ -1,25 +1,91 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
 
 const SearchBox = ({ fetchCustomImages }) => {
-  const showPastSearches = () => {
-    console.log('History Exists');
+  const [showSearchHistory, setShowSearchHistory] = useState(false);
+  const [inputSearchTitle, setInputSearchTitle] = useState('');
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      console.log('inputSearchTitle', inputSearchTitle);
+      if (inputSearchTitle) {
+        // eslint-disable-next-line no-use-before-define
+        addSearchHistory(inputSearchTitle.toLowerCase());
+      }
+    }, 600);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [inputSearchTitle]);
+
+  const getSearchHistoryItems = () => JSON.parse(localStorage.getItem('searchHistory'));
+
+  const updateSearchInput = (searchTitle) => {
+    setInputSearchTitle(searchTitle);
+    fetchCustomImages(searchTitle);
+    setShowSearchHistory(!showSearchHistory);
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      console.log(event.target.value);
-      fetchCustomImages(event.target.value.toLowerCase());
+  const renderSearchHistory = () => {
+    const historyItems = getSearchHistoryItems();
+    return historyItems.map((_item) => <li className="list-group-item" key={_item} onClick={() => updateSearchInput(_item)}>{_item}</li>);
+  };
+
+  const showPastSearches = () => {
+    if (getSearchHistoryItems()) {
+      setShowSearchHistory(!showSearchHistory);
     }
+  };
+
+  const addSearchHistory = (searchTitle) => {
+    const historyItems = getSearchHistoryItems();
+    if (!historyItems) {
+      localStorage.setItem('searchHistory', JSON.stringify([searchTitle]));
+    } else {
+      localStorage.setItem('searchHistory', JSON.stringify([...new Set([searchTitle, ...historyItems])]));
+    }
+  };
+
+  const handleOnChange = (event) => {
+    const searchTitle = event.target.value.toLowerCase();
+    console.log('handleOnChange', searchTitle);
+    setInputSearchTitle(searchTitle);
+    fetchCustomImages(searchTitle.trim());
+  };
+
+  const clearSearchHistory = () => {
+    localStorage.removeItem('searchHistory');
+    setShowSearchHistory(false);
+    toast.success('Cleared search history!');
   };
 
   return (
     <div style={{ background: '#0F2027', paddingBottom: '10px' }}>
       <h1 style={{ color: 'white', paddingTop: '20px', textAlign: 'center' }}>🖼️ Search Photos</h1>
       <div className="active-cyan-4 mx-5 my-4">
-        <input className="form-control" type="text" placeholder="🔍 Search Photos" onClick={showPastSearches} onKeyDown={handleKeyDown} />
+        <input className="form-control" type="text" placeholder="🔍 Search Photos" onClick={showPastSearches} onChange={handleOnChange} value={inputSearchTitle} />
+        <Toaster position="top-right" />
+        {showSearchHistory && (
+        <div className="card" style={{ border: 'none' }}>
+          <ul
+            className="list-group"
+            style={{
+              maxHeight: '250px', marginBottom: '0px', overflow: 'scroll', WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {renderSearchHistory()}
+          </ul>
+          <div className="modal-footer px-1 py-1">
+            <button type="button" className="btn btn-danger" onClick={() => clearSearchHistory()}>
+              clear
+            </button>
+          </div>
+        </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import Card from './card';
-import CardGrid from './grid';
+import Card from './imageCard';
+import CardGrid from './imagesGrid';
 import SearchBox from './search';
 
 export {
