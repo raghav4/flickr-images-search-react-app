@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 
 const Card = ({ imageSrc, imageAlt }) => (
   <div className="col">
-    <div className="card mx-3 my-3">
+    <div className="card mx-3 my-3" style={{ border: 'none' }}>
       <img
         src={imageSrc}
         className="card-img-top"
         alt={imageAlt}
+        style={{ borderRadius: '10px' }}
       />
     </div>
   </div>

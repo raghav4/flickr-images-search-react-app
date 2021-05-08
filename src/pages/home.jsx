@@ -7,12 +7,12 @@ const Home = () => {
   const [images, setImages] = useState([]);
   const [loaded, setLoaded] = useState(true);
 
-  const fetchImagesSuggestions = async () => {
+  const fetchImages = async (title = '') => {
+    const requestUrl = title ? `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=5adc0ef7be763da42ce94e17d0a3b3cf&text=${title}&page=20&format=json&nojsoncallback=1` : 'https://www.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=5adc0ef7be763da42ce94e17d0a3b3cf&format=json&nojsoncallback=1';
     try {
-      const imagesData = await axios.get('https://www.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=5adc0ef7be763da42ce94e17d0a3b3cf&format=json&nojsoncallback=1');
+      const imagesData = await axios.get(requestUrl);
       const photos = imagesData.data.photos.photo;
-      console.log('Fetching Images...');
-      console.log(photos);
+      console.log('Fetched Images...', photos);
       setImages(photos);
       setLoaded(false);
     } catch (ex) {
@@ -21,12 +21,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchImagesSuggestions();
+    fetchImages();
   }, []);
 
   return (
     <>
-      <SearchBox />
+      <SearchBox fetchCustomImages={fetchImages} />
       {loaded && (
       <h3 style={{
         textAlign: 'center', position: 'fixed', top: '50%', left: '33%',
@@ -35,6 +35,7 @@ const Home = () => {
         Please wait, images are being loaded...
       </h3>
       )}
+      <h4 className="my-3" style={{ textAlign: 'center' }}>🆕 Showing Recent Images</h4>
       <CardGrid images={images} />
     </>
   );
