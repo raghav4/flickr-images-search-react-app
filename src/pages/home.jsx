@@ -7,7 +7,7 @@ import { AlertModal, CardGrid, SearchBox } from '../components';
 
 const Home = () => {
   const [images, setImages] = useState([]);
-  const [loaded, setLoaded] = useState(true);
+  // const [loaded, setLoaded] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [progressLoader, setProgressLoader] = useState(true);
   const [isCustomSearch, setIsCustomSearch] = useState(false);
@@ -16,7 +16,7 @@ const Home = () => {
 
   const fetchImages = async (title = '', count = 20) => {
     setCurrentPage(currentPage + 1);
-    setLoaded(true);
+    // setLoaded(true);
     setProgressLoader(true);
     setCustomSearchTitle(title);
     const requestUrl = title ? `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=5adc0ef7be763da42ce94e17d0a3b3cf&text=${title}&page=${currentPage}&format=json&nojsoncallback=1` : `https://www.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=5adc0ef7be763da42ce94e17d0a3b3cf&page=${currentPage}&per_page=${count}&format=json&nojsoncallback=1`;
@@ -40,7 +40,7 @@ const Home = () => {
         }
         setIsCustomSearch(false);
       }
-      setLoaded(false);
+      // setLoaded(false);
       setProgressLoader(false);
     } catch (ex) {
       console.log(ex);
