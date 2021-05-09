@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
 
-const SearchBox = ({ fetchCustomImages }) => {
+const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
   const [showSearchHistory, setShowSearchHistory] = useState(false);
   const [inputSearchTitle, setInputSearchTitle] = useState('');
 
@@ -26,7 +26,7 @@ const SearchBox = ({ fetchCustomImages }) => {
 
   const updateSearchInput = (searchTitle) => {
     setInputSearchTitle(searchTitle);
-    fetchCustomImages(searchTitle);
+    fetchCustomImages(searchTitle, 20);
     setShowSearchHistory(!showSearchHistory);
   };
 
@@ -54,17 +54,22 @@ const SearchBox = ({ fetchCustomImages }) => {
     const searchTitle = event.target.value.toLowerCase();
     console.log('handleOnChange', searchTitle);
     setInputSearchTitle(searchTitle);
-    fetchCustomImages(searchTitle.trim());
+    fetchCustomImages(searchTitle.trim(), 20);
   };
 
   const clearSearchHistory = () => {
     localStorage.removeItem('searchHistory');
     setShowSearchHistory(false);
-    toast.success('Cleared search history!');
+    toast.success('Search history cleared!');
   };
 
   return (
-    <div style={{ background: '#0F2027', paddingBottom: '10px' }}>
+    <div
+      style={{
+        background: 'linear-gradient(to right, #2C5364, #203A43, #0F2027)', paddingBottom: '10px', position: 'sticky', width: '100%', top: '0',
+      }}
+      onMouseLeave={() => setShowSearchHistory(false)}
+    >
       <h1 style={{ color: 'white', paddingTop: '20px', textAlign: 'center' }}>🖼️ Search Photos</h1>
       <div className="active-cyan-4 mx-5 my-4">
         <input className="form-control" type="text" placeholder="🔍 Search Photos" onClick={showPastSearches} onChange={handleOnChange} value={inputSearchTitle} />
@@ -87,12 +92,14 @@ const SearchBox = ({ fetchCustomImages }) => {
         </div>
         )}
       </div>
+      <p className="my-3" style={{ color: 'white', textAlign: 'center', fontSize: '18px' }}>{searchResultsTitle}</p>
     </div>
   );
 };
 
 SearchBox.propTypes = {
   fetchCustomImages: PropTypes.func.isRequired,
+  searchResultsTitle: PropTypes.string.isRequired,
 };
 
 export default SearchBox;
