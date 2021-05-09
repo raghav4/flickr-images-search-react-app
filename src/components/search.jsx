@@ -66,7 +66,7 @@ const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
   return (
     <div
       style={{
-        background: 'linear-gradient(to right, #2C5364, #203A43, #0F2027)', paddingBottom: '10px', position: 'sticky', width: '100%', top: '0',
+        background: 'linear-gradient(to right, #2C5364, #203A43, #0F2027)', paddingBottom: '10px', position: 'sticky', width: '100%', top: '0', zIndex: 1,
       }}
       onMouseLeave={() => setShowSearchHistory(false)}
     >
