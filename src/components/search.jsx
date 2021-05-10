@@ -1,25 +1,31 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable no-console */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
+
+/**
+ * A search box component.
+ * @param {Function} fetchCustomImages - A function to fetch the custom images
+ * @param {String} searchResultsTitle - Search Result Title
+ * @returns {Component} returns a component with a search input along with a background
+ */
 
 const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
   const [showSearchHistory, setShowSearchHistory] = useState(false);
   const [inputSearchTitle, setInputSearchTitle] = useState('');
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      console.log('inputSearchTitle', inputSearchTitle);
+    const titleDelayFn = setTimeout(() => {
       if (inputSearchTitle) {
         // eslint-disable-next-line no-use-before-define
         addSearchHistory(inputSearchTitle.toLowerCase());
       }
+      fetchCustomImages(inputSearchTitle.trim().toLowerCase(), 20);
     }, 600);
 
-    return () => clearTimeout(delayDebounceFn);
+    return () => clearTimeout(titleDelayFn);
   }, [inputSearchTitle]);
 
   const getSearchHistoryItems = () => JSON.parse(localStorage.getItem('searchHistory'));
@@ -52,9 +58,8 @@ const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
 
   const handleOnChange = (event) => {
     const searchTitle = event.target.value.toLowerCase();
-    console.log('handleOnChange', searchTitle);
     setInputSearchTitle(searchTitle);
-    fetchCustomImages(searchTitle.trim(), 20);
+    // fetchCustomImages(searchTitle.trim(), 20);
   };
 
   const clearSearchHistory = () => {
