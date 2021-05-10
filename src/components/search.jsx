@@ -23,7 +23,7 @@ const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
         addSearchHistory(inputSearchTitle.toLowerCase());
       }
       fetchCustomImages(inputSearchTitle.trim().toLowerCase(), 20);
-    }, 600);
+    }, 900);
 
     return () => clearTimeout(titleDelayFn);
   }, [inputSearchTitle]);
