@@ -23,7 +23,7 @@ const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
         addSearchHistory(inputSearchTitle.toLowerCase());
       }
       fetchCustomImages(inputSearchTitle.trim().toLowerCase(), 20);
-    }, 900);
+    }, 800);
 
     return () => clearTimeout(titleDelayFn);
   }, [inputSearchTitle]);
@@ -59,7 +59,6 @@ const SearchBox = ({ fetchCustomImages, searchResultsTitle }) => {
   const handleOnChange = (event) => {
     const searchTitle = event.target.value.toLowerCase();
     setInputSearchTitle(searchTitle);
-    // fetchCustomImages(searchTitle.trim(), 20);
   };
 
   const clearSearchHistory = () => {
