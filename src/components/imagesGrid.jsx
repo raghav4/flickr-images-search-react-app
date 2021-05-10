@@ -1,8 +1,13 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import PropTypes from 'prop-types';
+import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import Card from './imageCard';
+
+/**
+ * A component to render the images as a responsive image gallery grid.
+ * @param {Array} images - An array of objects containting the metadata about the images.
+ * @returns {Component} returns an images grid component.
+ */
 
 const CardGrid = ({ images }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,9 +24,9 @@ const CardGrid = ({ images }) => {
     <>
       {modalOpen && (
       <MDBModal isOpen={modalOpen} toggle={() => setModalOpen(!modalOpen)}>
-        <MDBModalHeader toggle={() => setModalOpen(!modalOpen)}>{modalImageAlt}</MDBModalHeader>
+        <MDBModalHeader toggle={() => setModalOpen(!modalOpen)}>{modalImageAlt || '<NO TITLE PRESENT>'}</MDBModalHeader>
         <MDBModalBody>
-          <img className="justify-content-center" src={modalImage} alt={modalImageAlt} style={{ borderRadius: '10px' }} />
+          <img className="img-fluid mx-auto d-block" src={modalImage} alt={modalImageAlt} style={{ borderRadius: '10px' }} />
         </MDBModalBody>
       </MDBModal>
       )}
