@@ -3,8 +3,8 @@
 /* eslint-disable max-len */
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { AlertModal, CardGrid, SearchBox } from '../components';
 
 const Home = () => {
@@ -25,17 +25,23 @@ const Home = () => {
       const photos = imagesData.data.photos.photo;
       setSearchResultsTitle((photos && !photos.length && title) ? `No results found for the title "${title}"` : (title ? `Showing results for "${title}"` : '🆕 Showing Recent Images'));
       setInfiniteLoaderDisplay((photos && !photos.length && title) ? 'none' : 'flex');
+      // If the title is empty,
       if (title === '') {
+        // If any custom search is being made previously, then don't show the previous images in the grid.
+        // And disable the custom search.
         if (isCustomSearch) {
           setIsCustomSearch(false);
           setImages(photos);
         } else {
+          // Else if No custom images search was made, use the previous images.
           setImages([...images, ...photos]);
         }
       } else {
+        // If title is not empty and is same as above, show the previous images,
         if (isCustomSearch && title === customSearchTitle) {
           setImages([...images, ...photos]);
         } else {
+          // This is the scenario when a different title is being used, then show only the new fetched images.
           setImages(photos);
           setIsCustomSearch(true);
         }

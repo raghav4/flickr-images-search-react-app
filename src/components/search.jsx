@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
+import toast, { Toaster } from 'react-hot-toast';
 
 /**
  * A search box component.
